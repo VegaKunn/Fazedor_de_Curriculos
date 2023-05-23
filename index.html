@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pdf</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+      integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <style>
+      body {
+        background-color: #000;
+
+        font-family: Arial, sans-serif;
+      }
+
+      #setarExperiencias div {
+        margin-bottom: 1rem;
+      }
+
+      #educacaoTextAdd div {
+        margin-bottom: 2.5rem;
+      }
+
+      #conteudoInputs {
+        margin: 10px 0;
+      }
+
+      .opcoes {
+        margin: 5px;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      }
+
+      *::-webkit-scrollbar {
+        width: 12px;
+        background-color: #222;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        background-color: #810eec;
+        border-radius: 6px;
+      }
+
+      *::-webkit-scrollbar-thumb:hover {
+        background-color: #8a2be2;
+      }
+
+      *::-webkit-scrollbar-track {
+        background-color: #222;
+      }
+
+      *::-webkit-scrollbar-track:hover {
+        background-color: #323232;
+      }
+
+      h1 {
+        margin: 15px 0;
+        font-size: 3rem;
+        text-align: center;
+      }
+      h2 {
+        margin: 15px 10px;
+      }
+      h4 {
+        margin: 5px 10px;
+      }
+      button {
+        min-width: 60px;
+        height: 50px;
+        padding: 0 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      p {
+        margin: 0px 10px;
+        font-size: 1.25rem;
+      }
+      textarea {
+        margin: 0.6rem 0;
+        font-size: 1.25rem;
+      }
+      #conteudo {
+        margin-left: auto;
+        margin-right: 40px;
+        background-color: rgb(255, 255, 255);
+        width: 800px;
+        height: 1122px;
+        display: flex;
+      }
+
+      .esquerda {
+        background-color: rgb(43, 43, 43);
+        width: 32%;
+        height: 100%;
+        color: white;
+      }
+      .direita {
+        width: 68%;
+        height: 100%;
+      }
+      img {
+        width: 200px;
+      }
+      .foto {
+        display: flex;
+        margin-top: 25px;
+        justify-content: center;
+      }
+      hr {
+        margin: 15px auto 15px auto;
+        width: 93%;
+      }
+
+      .dividir {
+        display: flex;
+      }
+
+      /*
+      ////////////////////////////////////////////////////////
+      */
+
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: none;
+        background-color: #222;
+        color: #fff;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border-radius: 4px;
+        border: solid #8a2be2;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #8a2be2;
+        border: solid #994ae4;
+      }
+
+      .btn:active {
+        background-color: #ff00ff;
+      }
+
+      .neon-effect {
+        text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2, 0 0 30px #8a2be2,
+          0 0 40px #8a2be2;
+      }
+
+      .formulario {
+        width: 35%;
+        height: 1094px;
+        padding: 5px;
+        margin: 15px;
+        display: flex;
+        flex-direction: column;
+        border: 3px solid black;
+
+        overflow-y: scroll;
+      }
+      fieldset {
+        color: #fff;
+        margin: 5px;
+        padding: 10px;
+      }
+      label {
+        color: #fff;
+        display: block;
+        font-size: 1.25rem;
+        margin-top: 1rem;
+      }
+      .labelSpecial {
+        display: inline;
+      }
+      input {
+        margin-top: 0.6rem;
+        font-size: 1.3rem;
+      }
+
+      /* //////////////////// */
+    </style>
+  </head>
+  <body>
+    <div class="dividir">
+      <div class="formulario form-group">
+        <fieldset>
+          <legend>Editor</legend>
+          <button id="botao" class="btn">Baixar</button>
+          <br />
+          <br />
+          <input type="file" id="imagem-usuario" onchange="converterImagem()" />
+          <div id="conteudoInputs" class="abc">
+            <div class="dados">
+              <h2>Dados basicos</h2>
+
+              <div class="nome">
+                <label for="Conteudo" class="labelConteudo">Nome</label>
+
+                <input type="text" id="getNome" class="conteudoInputs" />
+              </div>
+
+              <div class="fone">
+                <label for="Conteudo" class="labelConteudo">telefone</label>
+
+                <input type="text" id="getFone" class="conteudoInputs" />
+              </div>
+
+              <div class="email">
+                <label for="Conteudo" class="labelConteudo">email</label>
+
+                <input type="text" id="getEmail" class="conteudoInputs" />
+              </div>
+
+              <div class="cep">
+                <label for="Conteudo" class="labelConteudo">cep, cidade</label>
+
+                <input type="text" id="getCep" class="conteudoInputs" />
+              </div>
+
+              <div class="sintese">
+                <label for="Conteudo" class="labelConteudo">Sintese</label>
+
+                <textarea
+                  id="getSintese"
+                  cols="45"
+                  rows="8"
+                  class="conteudoInputs"
+                ></textarea>
+              </div>
+              <section class="opcoes">
+                <button id="alterar">Alterar</button>
+                <button id="deletarSintese">Deletar Sintese</button>
+              </section>
+            </div>
+
+            <div class="experiencia">
+              <h2>Experiencia de trabalho</h2>
+              <div>
+                <button id="addQualidadess">Experiencia +</button>
+                <button id="removeQualidades">Experiencia -</button>
+                <button id="escreverQualidades">Salvar</button>
+              </div>
+              <div id="getNewCompetencias"></div>
+            </div>
+
+            <div class="competencias">
+              <h2>Qualidades</h2>
+
+              <div>
+                <button id="bt">Qualidades +</button>
+                <button id="bt2">Qualidades -</button>
+                <button id="bt3">Salvar</button>
+              </div>
+              <div id="InputCompetencias"></div>
+            </div>
+
+            <div class="educacao">
+              <h2>Ensino</h2>
+              <div>
+                <button id="addEnsino">Ensino +</button>
+                <button id="removerEnsino">Ensino -</button>
+                <button id="printarEnsino">Salvar</button>
+              </div>
+            </div>
+            <div id="educacaoInputsAdd"></div>
+          </div>
+          <section class="opcoes"></section>
+        </fieldset>
+      </div>
+      <div id="conteudo">
+        <div class="esquerda">
+          <div class="foto"></div>
+          <h2>COMPETÊNCIAS</h2>
+          <div id="respostas"></div>
+          <hr />
+          <h2>Educação</h2>
+          <div id="educacaoTextAdd"></div>
+        </div>
+        <div class="direita">
+          <h1 id="setNome">Nome completo</h1>
+
+          <p id="setFone">Fone/Cell</p>
+          <p id="setEmail">Email</p>
+          <p id="setCep">Cep, Cidade</p>
+          <h2>SÍNTESE</h2>
+          <div id="setSintese"></div>
+          <h2>Experiencia</h2>
+          <div id="setarExperiencias"></div>
+        </div>
+      </div>
+    </div>
+
+    <script defer>
+      let setAlterar = document.querySelector("#alterar");
+
+      let nome = document.querySelector("#getNome").value;
+      let fone = document.querySelector("#getFone").value;
+      let email = document.querySelector("#getEmail").value;
+      let cep = document.querySelector("#getCep").value;
+      // let sintese = document.querySelector("#getSintese").value;
+
+      alterar.addEventListener("click", () => {
+        let setNome = document.querySelector("#setNome");
+        let setFone = document.querySelector("#setFone");
+        let setEmail = document.querySelector("#setEmail");
+        let setCep = document.querySelector("#setCep");
+
+        //  let setSintese = document.querySelector("#setSintese");
+
+        //////////////////////////////
+
+        nome = document.querySelector("#getNome").value;
+        fone = document.querySelector("#getFone").value;
+        email = document.querySelector("#getEmail").value;
+        cep = document.querySelector("#getCep").value;
+        sintese = document.querySelector("#getSintese").value;
+
+        console.log(setNome);
+
+        nome.trim() ? (setNome.textContent = nome) : "";
+        fone.trim() ? (setFone.textContent = fone) : "";
+        email.trim() ? (setEmail.textContent = email) : "";
+        cep.trim() ? (setCep.textContent = cep) : "";
+        sintese.trim() ? quebrarTexto() : "";
+
+        nome = document.querySelector("#getNome").value = "";
+        fone = document.querySelector("#getFone").value = "";
+        email = document.querySelector("#getEmail").value = "";
+        cep = document.querySelector("#getCep").value = "";
+        sintese = document.querySelector("#getSintese").value = "";
+      });
+
+      /*
+
+      <input type="file" id="imagem-usuario" onchange="converterImagem()" />
+
+             */
+      // criação de imagem
+      function converterImagem() {
+        var receberArquivo = document.getElementById("imagem-usuario").files;
+        console.log(receberArquivo);
+        if (receberArquivo.length > 0) {
+          let carregarImagem = receberArquivo[0];
+          console.log(carregarImagem);
+
+          let lerArquivo = new FileReader();
+          lerArquivo.onload = function (arquivoCarregado) {
+            let imagemBase64 = arquivoCarregado.target.result;
+            let novaImagem = document.createElement("img");
+
+            novaImagem.src = imagemBase64;
+            document.querySelector(".foto").innerHTML = novaImagem.outerHTML;
+            console.log(novaImagem);
+          };
+          lerArquivo.readAsDataURL(carregarImagem);
+        }
+      }
+
+      //////////////// Qualidades
+
+      let InputCompetencias = document.querySelector("#InputCompetencias");
+      let respostas = document.querySelector("#respostas");
+      let add = document.querySelector("#bt");
+      let min = document.querySelector("#bt2");
+      let escrever = document.querySelector("#bt3");
+      let contador = 0;
+      let divConteudo = InputCompetencias.children;
+
+      escrever.addEventListener("click", () => {
+        for (i = 0; i < InputCompetencias.children.length; i++) {
+          console.log(InputCompetencias.children[i].children[1]);
+          if (InputCompetencias.children[i].children[1].value != "") {
+            respostas.children[i].textContent =
+              InputCompetencias.children[i].children[1].value;
+          }
+        }
+        for (i = 0; i < InputCompetencias.children.length; i++) {
+          InputCompetencias.children[i].children[0].value = "";
+        }
+      });
+
+      add.addEventListener("click", () => {
+        imprimirInputs();
+      });
+      min.addEventListener("click", () => {
+        reduzirInputs();
+      });
+
+      function reduzirInputs() {
+        InputCompetencias.lastChild
+          ? InputCompetencias.lastChild.remove(true)
+          : "";
+        respostas.lastChild ? respostas.lastChild.remove(true) : "";
+
+        console.log(InputCompetencias.lastChild);
+        console.log(InputCompetencias.children.length);
+      }
+
+      function imprimirInputs() {
+        let divParam = document.createElement("div");
+        let inputParam = document.createElement("input");
+        let labelQualidades = document.createElement("label");
+        let brs = document;
+
+        labelQualidades.textContent = "Qualidades :";
+
+        inputParam.setAttribute(
+          "id",
+          `getCompetencias${InputCompetencias.children.length}`
+        );
+        divParam.setAttribute(
+          "id",
+          `param${InputCompetencias.children.length}`
+        );
+        divParam.appendChild(labelQualidades);
+
+        divParam.appendChild(inputParam);
+
+        InputCompetencias.appendChild(divParam);
+
+        let novoP = document.createElement("p");
+        novoP.setAttribute("id", `novoP${InputCompetencias.children.length}`);
+        novoP.textContent =
+          "testo numero: " + InputCompetencias.children.length;
+        respostas.appendChild(novoP);
+      }
+
+      ///////////////     PARTE QUE TRATA SOBRE A EXPERIENCIA
+
+      let myDiv2 = document.querySelector("#getNewCompetencias");
+      let respostas2 = document.querySelector("#setarExperiencias");
+      let add2 = document.querySelector("#addQualidadess");
+      let min2 = document.querySelector("#removeQualidades");
+      let escrever2 = document.querySelector("#escreverQualidades");
+
+      escrever2.addEventListener("click", () => {
+        let periodo;
+        let empresa;
+        let empresaLocal;
+        let ocupacao;
+        let oQueFaz;
+        for (i = 0; i < myDiv2.children.length; i++) {
+          let periodoValue = document.querySelector(`#periodoInput${i}`);
+          let empresaValue = document.querySelector(`#empresaInput${i}`);
+          let empresaLocalValue = document.querySelector(
+            `#localEmpresaInput${i}`
+          );
+          let ocupacaoValue = document.querySelector(`#cargoInput${i}`);
+          let oQueFazValue = document.querySelector(`#oQueFezInput${i}`);
+          // textos abaixo, valores acima.
+
+          let periodoText = document.querySelector(`#setPeriodo${i}`);
+          let empresaText = document.querySelector(`#setEmpresa${i}`);
+          let empresaLocalText = document.querySelector(`#setLocalEmpresa${i}`);
+          let ocupacaoText = document.querySelector(`#setCargo${i}`);
+          let oQueFazText = document.querySelector(`#setFazer${i}`);
+
+          console.log(periodo);
+
+          // atribuição de valores
+          console.log(oQueFazText);
+          console.log(oQueFazValue);
+
+          periodoValue.value.trim()
+            ? (periodoText.textContent = periodoValue.value.trim())
+            : false;
+          empresaValue.value.trim()
+            ? (empresaText.textContent = empresaValue.value.trim())
+            : false;
+          empresaLocalValue.value.trim()
+            ? (empresaLocalText.textContent = empresaLocalValue.value.trim())
+            : false;
+          ocupacaoValue.value.trim()
+            ? (ocupacaoText.textContent = ocupacaoValue.value.trim())
+            : false;
+          oQueFazValue.value.trim()
+            ? (oQueFazText.textContent = oQueFazValue.value.trim())
+            : false;
+          // zerar texto
+
+          periodoValue.value = "";
+          empresaValue.value = "";
+          empresaLocalValue.value = "";
+          ocupacaoValue.value = "";
+          oQueFazValue.value = "";
+        }
+      });
+
+      function reduzirInputsQualidades() {
+        myDiv2.lastChild ? myDiv2.lastChild.remove(true) : "";
+        respostas2.lastChild ? respostas2.lastChild.remove(true) : "";
+      }
+
+      function imprimirInputsQualidades() {
+        let divConteudo = respostas2.children.length;
+        let newInput = document.createElement("div");
+        newInput.innerHTML = `
+            
+            <label>Periodo (xx/xxxx - xx/xxxx): </label>
+            
+            <input id="periodoInput${divConteudo}" type="text" />
+            
+            <label>Empresa: </label>
+            
+            <input id="empresaInput${divConteudo}" type="text" />
+            
+            <label>Local da empresa: </label>
+            
+            <input id="localEmpresaInput${divConteudo}" type="text" />
+            
+            <label>Ocupação do cargo: </label>
+            
+            <input id="cargoInput${divConteudo}" type="text" />
+            
+            <label>O que fez: </label>
+            
+            <textarea id="oQueFezInput${divConteudo}" cols="50" rows="8"></textarea>
+            
+      `;
+        myDiv2.appendChild(newInput);
+
+        let divParam = document.createElement("div");
+        divParam.innerHTML = `
+          <p id="setPeriodo${divConteudo}">periodo</p>
+              <p>
+                <strong id="setEmpresa${divConteudo}">Empresa</strong> |
+                <label class="labelSpecial" id="setLocalEmpresa${divConteudo}"> Local da empresa</label>
+              </p>
+              <p id="setCargo${divConteudo}">Ocupação de cargo</p>
+              <p id="setFazer${divConteudo}">O que fez</p>`;
+
+        respostas2.appendChild(divParam);
+      }
+
+      // inputs
+
+      add2.addEventListener("click", () => {
+        imprimirInputsQualidades();
+      });
+
+      min2.addEventListener("click", () => {
+        reduzirInputsQualidades();
+      });
+
+      //////////// Cursos
+
+      let educacaoInputsAdd = document.querySelector("#educacaoInputsAdd");
+      let educacaoTextAdd = document.querySelector("#educacaoTextAdd");
+      let addEnsino = document.querySelector("#addEnsino");
+      let removerEnsino = document.querySelector("#removerEnsino");
+      let escreverEnsino = document.querySelector("#printarEnsino");
+
+      escreverEnsino.addEventListener("click", () => {
+        for (i = 0; i < educacaoInputsAdd.children.length; i++) {
+          let educacaoDataValue = document.querySelector(
+            `#getEducacaoData${i}`
+          );
+          let instituicaoValue = document.querySelector(`#getInstituicao${i}`);
+          let localEnsinoValue = document.querySelector(`#getLocalEnsino${i}`);
+          let nomeCursoValue = document.querySelector(`#getNomeCurso${i}`);
+          let cursoResumoValue = document.querySelector(`#getCursoResumo${i}`);
+          // textos abaixo, valores acima.
+
+          let educacaoDataText = document.querySelector(`#setEducacaoData${i}`);
+          let instituicaoText = document.querySelector(`#setInstituicao${i}`);
+          let localEnsinoText = document.querySelector(`#setLocalEnsino${i}`);
+          let nomeCursoText = document.querySelector(`#setNomeCurso${i}`);
+          let cursoResumoText = document.querySelector(`#setCursoResumo${i}`);
+          // atribuição de valores
+
+          educacaoDataValue.value.trim()
+            ? (educacaoDataText.textContent = educacaoDataValue.value.trim())
+            : false;
+          instituicaoValue.value.trim()
+            ? (instituicaoText.textContent = instituicaoValue.value.trim())
+            : false;
+          localEnsinoValue.value.trim()
+            ? (localEnsinoText.textContent = localEnsinoValue.value.trim())
+            : false;
+          nomeCursoValue.value.trim()
+            ? (nomeCursoText.textContent = nomeCursoValue.value.trim())
+            : false;
+          cursoResumoValue.value.trim()
+            ? (cursoResumoText.textContent = cursoResumoValue.value.trim())
+            : false;
+          // zerar texto
+          console.log(educacaoDataText);
+          educacaoDataValue.value = "";
+          instituicaoValue.value = "";
+          localEnsinoValue.value = "";
+          nomeCursoValue.value = "";
+          cursoResumoValue.value = "";
+        }
+      });
+
+      addEnsino.addEventListener("click", () => {
+        imprimirInputs3();
+      });
+      removerEnsino.addEventListener("click", () => {
+        reduzirInputs3();
+      });
+
+      function reduzirInputs3() {
+        educacaoInputsAdd.lastChild
+          ? educacaoInputsAdd.lastChild.remove(true)
+          : "";
+        educacaoTextAdd.lastChild ? educacaoTextAdd.lastChild.remove(true) : "";
+
+        console.log(educacaoInputsAdd.lastChild);
+        console.log(educacaoInputsAdd.children.length);
+      }
+
+      function imprimirInputs3() {
+        let divConteudo = educacaoTextAdd.children.length;
+        let newInput = document.createElement("div");
+
+        newInput.innerHTML = `
+        <label for="Conteudo" class="labelConteudo"
+                >Ano inicio / termino</label
+              >
+              
+              <input type="text" id="getEducacaoData${divConteudo}" class="conteudoInputs" />
+              
+
+              <label for="Conteudo" class="labelConteudo">Instituição</label>
+              
+              <input type="text" id="getInstituicao${divConteudo}" class="conteudoInputs" />
+              
+
+              <label for="Conteudo" class="labelConteudo"
+                >Local de ensino</label
+              >
+              
+              <input type="text" id="getLocalEnsino${divConteudo}" class="conteudoInputs" />
+              
+
+              <label for="Conteudo" class="labelConteudo">Nome do curso</label>
+              
+              <input type="text" id="getNomeCurso${divConteudo}" class="conteudoInputs" />
+              
+
+              <label for="Conteudo" class="labelConteudo"
+                >Resumo do que aprendeu</label
+              >
+              
+              <textarea id="getCursoResumo${divConteudo}" class="conteudoInputs" cols="40" rows="8" ></textarea>
+              
+            
+      `;
+        educacaoInputsAdd.appendChild(newInput);
+
+        let divParam = document.createElement("div");
+        divParam.innerHTML = `
+        <div>
+            <h4 id="setEducacaoData${divConteudo}">Ano inicio / termino</h4>
+            <p>
+              <label class="labelSpecial" id="setInstituicao${divConteudo}">Instituição</label> |
+              <label class="labelSpecial" id="setLocalEnsino${divConteudo}"> Local de ensino</label>
+            </p>
+            <p id="setNomeCurso${divConteudo}">Nome do curso.</p>
+            <p id="setCursoResumo${divConteudo}">Resumo do que aprendeu</p>
+            `;
+
+        educacaoTextAdd.appendChild(divParam);
+      }
+
+      ////////////////// QUEBRAR LINHAS
+
+      function quebrarTexto() {
+        let textos = document.getElementById("getSintese");
+        let resultado = document.getElementById("setSintese");
+        let paragrafosQuebrados;
+        console.log(textos.value);
+        paragrafosQuebrados = textos.value.split("\n");
+        paragrafosQuebrados.map((item, i) => {
+          let escrita = document.createElement("p");
+          escrita.innerHTML = item;
+          console.log(escrita);
+          resultado.appendChild(escrita);
+          textos.textContent = "";
+        });
+      }
+
+      function deletarSinteses() {
+        let deletarSintese = document.getElementById("setSintese");
+
+        deletarSintese.children.length > 0
+          ? deletarSintese.lastChild.remove()
+          : "";
+      }
+      let sinteseDeletar = document.getElementById("deletarSintese");
+      sinteseDeletar.addEventListener("click", () => {
+        deletarSinteses();
+      });
+
+      /////////////////     IMPRESSÃO
+
+      let generate = document.querySelector("#botao");
+
+      generate.addEventListener("click", () => {
+        const conteudo = document.querySelector("#conteudo");
+
+        const opcoes = {
+          margin: [0, 0, 0, 0],
+          filename: "arquivo.pdf",
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", formate: "a4", orientation: "portrait" },
+        };
+
+        html2pdf().set(opcoes).from(conteudo).save();
+      });
+    </script>
+  </body>
+</html>
